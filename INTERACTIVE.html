@@ -17,6 +17,14 @@
 $.getJSON( "https://github.com/karth2512/EDAV-INTERACTIVE/blob/master/MVC.json", function( data ) {
     console.log(data)
 });
+$.ajax({
+  method: 'GET',
+  url: 'https://github.com/karth2512/EDAV-INTERACTIVE/blob/master/MVC.json',
+  dataType: 'jsonp', //change the datatype to 'jsonp' works in most cases
+  success: (res) => {
+   console.log(res);
+  }
+})
 // create 2 data_set
 var data = {
 "Year" : [
