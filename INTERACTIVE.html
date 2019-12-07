@@ -11,13 +11,17 @@
 <body>
 
 <!-- Create a div where the graph will take place -->
-<div id="my_dataviz">
+<select id ="variable">
+  <option value="NUMBER OF PEDESTRIANS KILLED" selected>NUMBER OF PEDESTRIANS KILLED</option>
+  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
+  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
+  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
+</select>
 <button id="Year">Reset Graph</button>
+<div id="my_dataviz">
 <script>
-$.getJSON( "./MVC.json", function( data ) {
-    console.log(data)
-});
-// create 2 data_set
+
+  console.log("ASDASaaaaaaaD")
 var data = {
 "Year" : [
    {group: "2001", value: 4},
@@ -52,6 +56,17 @@ var data = {
    {group: "4", value: 7}
 ]
 }
+$.ajax({
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC.json",
+  success: function (data)
+  {
+    console.log(data)
+    data = JSON.parse(data);
+    console.log(data)
+  }
+});
+
+// create 2 data_set
 function getData(str)
 {
 
