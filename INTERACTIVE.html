@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- Load d3.js -->
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=gk9RvLs8sA1jkOz76FuD9ihLHpf86bKVgGRFRDnrkjXJva01FmIeW7oTHJnxOmxxUg-fyUzcNtgeZRz98QUdhtzHgp_JZqkfRx-rRVlCBZFzisc872Hhtji6EvjocR7i9brOZiDk-mYuNEFerorX8WD9M7pfMVRQG-5kxM7d5kT0la0AecZGj9W9i67X8YL3HOoHJkTD6bOVTwyVhvKlE5QvMFijM6Kjx0_kx5ezSIeikUpCDKZri3OtFUwtEK04bOz9-dcwjZwuTIKCIqOKZ6-aj2f0_3hidXJ5X3f2XMYMiJEFNrR8T3SR8ATCPRg2UG6NjiTxel43XRsd5DEWw_d_ckRjj7Cjv70ltPlpqh-FY7Sva0YV-IKFzMEtp2NpswhAES2wDy5kFCOdraKLWKnrSrCcSXyBRmIoYOjn5HMsnShjCpH6Ha8nFlvuwiaKAR3jGbtHVy0CMHUDfeSvnBrkCugN8xpO4SSt277KmqBVIPfFGtcEYS_tmonKWPGknAxI7PY8iQ4aFGl8K6Ub2f3boKwbLPkFFHb3HSWKo-AqDmOexYBN3_SoRPcdq2rOXuwfmT16DoSDaj5hQ_2JO-ENbUXD908bof6fdlrzqRQI90zxbeJnA0Ddd9485k1NpcQ1NODzxxFlRIFn5u3rsg" charset="UTF-8"></script><script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
@@ -14,17 +14,9 @@
 <div id="my_dataviz">
 <button id="Year">Reset Graph</button>
 <script>
-$.getJSON( "https://github.com/karth2512/EDAV-INTERACTIVE/blob/master/MVC.json", function( data ) {
+$.getJSON( "./MVC.json", function( data ) {
     console.log(data)
 });
-$.ajax({
-  method: 'GET',
-  url: 'https://github.com/karth2512/EDAV-INTERACTIVE/blob/master/MVC.json',
-  dataType: 'jsonp', //change the datatype to 'jsonp' works in most cases
-  success: (res) => {
-   console.log(res);
-  }
-})
 // create 2 data_set
 var data = {
 "Year" : [
