@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!-- AUTH: Karthik Rajaraman Iyer -->
+<!-- source : https://www.d3-graph-gallery.com/graph/barplot_button_data_hard.html -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Load d3.js -->
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=gk9RvLs8sA1jkOz76FuD9ihLHpf86bKVgGRFRDnrkjXJva01FmIeW7oTHJnxOmxxUg-fyUzcNtgeZRz98QUdhtzHgp_JZqkfRx-rRVlCBZFzisc872Hhtji6EvjocR7i9brOZiDk-mYuNEFerorX8WD9M7pfMVRQG-5kxM7d5kT0la0AecZGj9W9i67X8YL3HOoHJkTD6bOVTwyVhvKlE5QvMFijM6Kjx0_kx5ezSIeikUpCDKZri3OtFUwtEK04bOz9-dcwjZwuTIKCIqOKZ6-aj2f0_3hidXJ5X3f2XMYMiJEFNrR8T3SR8ATCPRg2UG6NjiTxel43XRsd5DEWw_d_ckRjj7Cjv70ltPlpqh-FY7Sva0YV-IKFzMEtp2NpswhAES2wDy5kFCOdraKLWKnrSrCcSXyBRmIoYOjn5HMsnShjCpH6Ha8nFlvuwiaKAR3jGbtHVy0CMHUDfeSvnBrkCugN8xpO4SSt277KmqBVIPfFGtcEYS_tmonKWPGknAxI7PY8iQ4aFGl8K6Ub2f3boKwbLPkFFHb3HSWKo-AqDmOexYBN3_SoRPcdq2rOXuwfmT16DoSDaj5hQ_2JO-ENbUXD908bof6fdlrzqRQI90zxbeJnA0Ddd9485k1NpcQ1NODzxxFlRIFn5u3rsg" charset="UTF-8"></script><script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz">
+<button id="Year">Reset Graph</button>
+<script>
+$.getJSON( "https://github.com/Akshaypakhle10/NYC---Motor-Vehicle-Collisions/blob/master/data/MVC.json", function( data ) {
+    console.log(data)
+});
+// create 2 data_set
+var data = {
+"Year" : [
+   {group: "2001", value: 4},
+   {group: "2002", value: 16},
+   {group: "2003", value: 8}
+],
+"2001" : [
+   {group: "2001Jan", value: 1},
+   {group: "2001Feb", value: 1},
+   {group: "2001March", value: 1}
+],
+"2002" : [
+   {group: "2002Jan", value: 2},
+   {group: "2002Feb", value: 2},
+   {group: "2002March", value: 2}
+],
+"2003" : [
+   {group: "2003Jan", value: 3},
+   {group: "2003Feb", value: 3},
+   {group: "2003March", value: 3}
+],
+"2001Jan" :[
+   {group: "1", value: 4},
+   {group: "2", value: 3},
+   {group: "3", value: 2},
+   {group: "4", value: 1}
+],
+"2001Feb" :[
+   {group: "1", value: 4},
+   {group: "2", value: 4},
+   {group: "3", value: 5},
+   {group: "4", value: 7}
+]
+}
+function getData(str)
+{
+
+console.log(data[str])
+return data[str]
+
+}
+//var order = ["
+d3.select("#Year").on("click",update);
+// set the dimensions and margins of the graph
+var margin = {top: 30, right: 30, bottom: 70, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Initialize the X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+var xAxis = svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+var y = d3.scaleLinear()
+  .range([ height, 0]);
+var yAxis = svg.append("g")
+  .attr("class", "myYaxis")
+
+
+// A function that create / update the plot for a given variable:
+function update() {
+	console.log("ASDASD")
+  // Update the X axis
+  
+  //console.log(d3.select(this));
+  var fetchedData = data[d3.select(this).attr("id")];
+  //console.log("F",fetchedData)
+  //fetchedData = data[fetchedData]
+  console.log(fetchedData)
+  x.domain(fetchedData.map(function(d) { return d.group; }))
+  xAxis.call(d3.axisBottom(x))
+  // Update the Y axis
+  y.domain([0, d3.max(fetchedData, function(d) { return d.value }) ]);
+  yAxis.transition().duration(1000).call(d3.axisLeft(y));
+
+  // Create the u variable
+  var u = svg.selectAll("rect")
+    .data(fetchedData)
+
+  u.enter()
+    .append("rect")
+    .merge(u)
+	.on("click",update)
+    .transition().duration(1000) // get the already existing elements as well
+      .attr("x", function(d) { return x(d.group); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.value); })
+      .attr("fill", "#69b3a2")
+      .attr("id", function(d) { return d.group; })
+
+  // If less group in the new dataset, I delete the ones not in use anymore
+  u
+    .exit()
+    .remove()
+}
+function update2(){};
+
+// Initialize the plot with the first dataset
+//update()
+
+</script>
+</body></html>
