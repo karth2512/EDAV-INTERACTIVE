@@ -22,50 +22,25 @@
 <script>
 
   console.log("ASDASaaaaaaaD")
-var data = {
-"Year" : [
-   {group: "2001", value: 4},
-   {group: "2002", value: 16},
-   {group: "2003", value: 8}
-],
-"2001" : [
-   {group: "2001Jan", value: 1},
-   {group: "2001Feb", value: 1},
-   {group: "2001March", value: 1}
-],
-"2002" : [
-   {group: "2002Jan", value: 2},
-   {group: "2002Feb", value: 2},
-   {group: "2002March", value: 2}
-],
-"2003" : [
-   {group: "2003Jan", value: 3},
-   {group: "2003Feb", value: 3},
-   {group: "2003March", value: 3}
-],
-"2001Jan" :[
-   {group: "1", value: 4},
-   {group: "2", value: 3},
-   {group: "3", value: 2},
-   {group: "4", value: 1}
-],
-"2001Feb" :[
-   {group: "1", value: 4},
-   {group: "2", value: 4},
-   {group: "3", value: 5},
-   {group: "4", value: 7}
-]
+window.data = {
 }
 $.ajax({
-  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_B_sum.json",
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_B_SUM.json",
   success: function (data)
   {
-    console.log(data)
-    data = JSON.parse(data);
-    console.log(data)
+    window.data["BOROUGH"] = JSON.parse(data)
+    console.log(window.data)
   }
 });
-
+$.ajax({
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_YB_SUM.json",
+  success: function (data)
+  {
+    temp = JSON.parse(data)
+    console.log(temp)
+  }
+});
+data = window.data;
 // create 2 data_set
 function getData(str)
 {
