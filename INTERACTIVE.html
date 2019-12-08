@@ -9,48 +9,72 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-
-<!-- Create a div where the graph will take place -->
 <select id ="variable">
   <option value="NUMBER OF PEDESTRIANS KILLED" selected>NUMBER OF PEDESTRIANS KILLED</option>
-  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
-  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
-  <option value="ped_killed" selected>NUMBER OF PEDESTRIANS KILLED</option>
+  <option value="NUMBER OF PEDESTRIANS INJURED" selected>NUMBER OF PEDESTRIANS INJURED</option>
+  <option value="NUMBER OF PERSONS KILLED" selected>NUMBER OF PERSONS KILLED</option>
+  <option value="NUMBER OF PERSONS INJURED" selected>NUMBER OF PERSONS INJURED</option>
+  <option value="NUMBER OF MOTORIST KILLED" selected>NUMBER OF MOTORIST KILLED</option>
+  <option value="NUMBER OF MOTORIST INJURED" selected>NUMBER OF MOTORIST INJURED</option>
+  <option value="NUMBER OF CYCLIST KILLED" selected>NUMBER OF CYCLIST KILLED</option>
+  <option value="NUMBER OF CYCLIST INJURED" selected>NUMBER OF CYCLIST INJURED</option>
 </select>
-<button id="Year">Reset Graph</button>
+<button id="BOROUGH">Make Graph</button>
 <div id="my_dataviz">
 <script>
-
   console.log("ASDASaaaaaaaD")
 window.data = {
 }
 $.ajax({
-  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_B_SUM.json",
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_B.json",
   success: function (data)
   {
     window.data["BOROUGH"] = JSON.parse(data)
-    console.log(window.data)
   }
 });
 $.ajax({
-  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_YB_SUM.json",
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_YB.json",
+  success: function (data)
+  {
+    temp = JSON.parse(data)
+    for(i in temp)
+    {
+      for (j in temp[i])
+      {
+        if ("BOROUGH-"+i in window.data)
+        {
+        window.data["BOROUGH-"+i][j] = temp[i][j]
+        }
+        else
+        {
+        window.data["BOROUGH-"+i] = {}
+        window.data["BOROUGH-"+i][j] = temp[i][j]
+        }
+      }
+    }
+    //console.log(window.data)
+  }
+});
+$.ajax({
+  url: "https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/karth2512/EDAV-INTERACTIVE/master/MVC_YMB.json",
   success: function (data)
   {
     temp = JSON.parse(data)
     console.log(temp)
+    for(i in temp)
+    {
+      for (j in temp[i])
+      {
+        window.data["BOROUGH-"+i+"-"+j] = temp[i][j]
+      }
+    }
+    console.log(window.data)
   }
 });
 data = window.data;
-// create 2 data_set
-function getData(str)
-{
 
-console.log(data[str])
-return data[str]
-
-}
 //var order = ["
-d3.select("#Year").on("click",update);
+d3.select("#BOROUGH").on("click",update);
 // set the dimensions and margins of the graph
 var margin = {top: 30, right: 30, bottom: 70, left: 60},
     width = 460 - margin.left - margin.right,
@@ -83,40 +107,47 @@ var yAxis = svg.append("g")
 function update() {
 	console.log("ASDASD")
   // Update the X axis
-  
+  var Y = document.getElementById("variable").value;
   //console.log(d3.select(this));
+  var id = d3.select(this).attr("id");
   var fetchedData = data[d3.select(this).attr("id")];
   //console.log("F",fetchedData)
   //fetchedData = data[fetchedData]
-  console.log(fetchedData)
-  x.domain(fetchedData.map(function(d) { return d.group; }))
+  console.log(id)
+  console.log(Object.values(fetchedData))
+  x.domain(Object.keys(fetchedData))
   xAxis.call(d3.axisBottom(x))
   // Update the Y axis
-  y.domain([0, d3.max(fetchedData, function(d) { return d.value }) ]);
+  y.domain([0, d3.max(Object.values(fetchedData), function(d) { return d[Y] }) + 10 ]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
-
-  // Create the u variable
+  console.log(fetchedData)
+  var modData = []
+  for(i in fetchedData)
+  {
+    var el = {}
+    el[id+"-"+i] = fetchedData[i][Y]
+    modData.push(el)
+  }
+  console.log(modData)
   var u = svg.selectAll("rect")
-    .data(fetchedData)
+    .data(modData)
 
   u.enter()
     .append("rect")
     .merge(u)
 	.on("click",update)
     .transition().duration(1000) // get the already existing elements as well
-      .attr("x", function(d) { return x(d.group); })
-      .attr("y", function(d) { return y(d.value); })
+      .attr("x", function(d) { return x(Object.keys(d)[0].split("-").splice(-1)[0]); })
+      .attr("y", function(d) { return y(Object.values(d)[0]); })
       .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.value); })
+      .attr("height", function(d) { return height - y(Object.values(d)[0]); })
       .attr("fill", "#69b3a2")
-      .attr("id", function(d) { return d.group; })
+      .attr("id", function(d) { return Object.keys(d)[0]; })
 
   // If less group in the new dataset, I delete the ones not in use anymore
-  u
-    .exit()
+  u.exit()
     .remove()
 }
-function update2(){};
 
 // Initialize the plot with the first dataset
 //update()
