@@ -1,4 +1,4 @@
-console.log("ASDASaaaaaaaD")
+console.log("Running...")
 window.data = {
 }
 $.ajax({
@@ -47,7 +47,6 @@ $.ajax({
   }
 });
 data = window.data;
-
 d3.select("#BOROUGH").on("click",update);
 // set the dimensions and margins of the graph
 var margin = {top: 30, right: 30, bottom: 70, left: 60},
@@ -75,6 +74,8 @@ var y = d3.scaleLinear()
   .range([ height, 0]);
 var yAxis = svg.append("g")
   .attr("class", "myYaxis")
+colors = ["#008000","#007000","#006000"]
+var i = 0;
 
 function update() {
   var Y = document.getElementById("variable").value;
@@ -85,6 +86,7 @@ function update() {
     $('#alertTitle').html("Data Error")
     $('#alertBody').html("Selected subdivision unavailable. Consider replotting for another variable")
     $('#alertModal').modal({ show: true})
+     return;
   }
   svg.selectAll("text").remove();
   var title=id.split("-")
@@ -133,7 +135,7 @@ function update() {
 
   x.domain(Object.keys(fetchedData))
   xAxis.call(d3.axisBottom(x))
-  y.domain([0, d3.max(Object.values(fetchedData), function(d) { return d[Y] }) + 10 ]);
+  y.domain([0, d3.max(Object.values(fetchedData), function(d) { return d[Y] }) + 1 ]);
   yAxis.transition().duration(1000).call(d3.axisLeft(y));
   var modData = []
   for(i in fetchedData)
@@ -149,14 +151,26 @@ function update() {
     .append("rect")
     .merge(u)
 	.on("click",update)
+    .on("mouseover",highlight)
+    .on("mouseout",unhighlight)
     .transition().duration(1000)
       .attr("x", function(d) { return x(Object.keys(d)[0].split("-").splice(-1)[0]); })
       .attr("y", function(d) { return y(Object.values(d)[0]); })
       .attr("width", x.bandwidth())
       .attr("height", function(d) { return height - y(Object.values(d)[0]); })
-      .attr("fill", "#69b3a2")
+      .attr("fill", colors[0])
       .attr("id", function(d) { return Object.keys(d)[0]; })
 
   u.exit()
     .remove()
+}
+function highlight()
+{
+    d3.select(this).style("outline","thick ridge #bf8040");
+    d3.select(this).style("cursor","pointer");
+}
+function unhighlight()
+{
+    d3.select(this).style("outline","");
+    d3.select(this).style("cursor","auto");
 }
