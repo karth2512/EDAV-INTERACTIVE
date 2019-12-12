@@ -74,7 +74,7 @@ var y = d3.scaleLinear()
   .range([ height, 0]);
 var yAxis = svg.append("g")
   .attr("class", "myYaxis")
-colors = ["#008000","#007000","#006000"]
+colors = ["#007bff","#007000","#006000"]
 var i = 0;
 
 function update() {
@@ -166,7 +166,7 @@ function update() {
 }
 function highlight()
 {
-    d3.select(this).style("outline","thick ridge #bf8040");
+    d3.select(this).style("outline","5px solid #007399");
     d3.select(this).style("cursor","pointer");
 }
 function unhighlight()
